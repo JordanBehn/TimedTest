@@ -109,9 +109,10 @@ function runQuiz() {
                 userAnswer = this.getAttribute("index");
                 console.log(userAnswer)
                 console.log(questions[i].correctIndex)
-
-                if (questions[i].correctIndex == userAnswer) { score = score + 1 } else {}
-
+                    //if correct add 1 to score, if wrong, take 10 seconds away
+                if (questions[i].correctIndex == userAnswer) { score = score + 1 } else {
+                    secondsElapsed = secondsElapsed + 10
+                }
                 numCorrect.textContent = "Score: " + score;
                 i++;
                 runQuiz();
@@ -123,15 +124,13 @@ function runQuiz() {
     }
 }
 
-//write questions[i].q
 
-//make buttons for questions[i].answers[all]
-//compare value of button pressed to questions[i].correctIndex
-//if wrong, subtract 10 seconds
-//if right, add 1 to score
-//go to next question
-//}
-
+// function startTimer() {
+//     interval = setInterval(function() {
+//         secondsElapsed++;
+//         renderTime();
+//     }, 1000);
+// }
 //ends timer, saves initials and score, creates button to restart quiz
 function endQuiz() {
     //display correct information, stop timer, save scores and initials
