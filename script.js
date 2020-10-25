@@ -100,6 +100,9 @@ function endQuiz() {
     var initials = prompt("Nice score! Enter your intials?")
     localStorage.setItem("initials", initials)
     localStorage.setItem("score", score)
+    savedInitials.textContent = localStorage.getItem("initials")
+    savedScore.textContent = localStorage.getItem("score")
+
 
     var restartBtn = document.createElement("button");
     restartBtn.innerHTML = "Try again?";
