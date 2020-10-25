@@ -1,4 +1,4 @@
-var questiondiv = document.querySelector("#question");
+var questionDiv = document.querySelector("#question");
 var numCorrect = document.querySelector("#num-correct");
 var minutesLeft = document.querySelector("#minutes");
 var secondsLeft = document.querySelector("#seconds");
@@ -8,34 +8,35 @@ var savedInitials = document.querySelector("#saved-initials");
 var savedScore = document.querySelector("#saved-score");
 
 var secondsElapsed = 0;
-var totalSeconds = 5;
+var totalSeconds = 120;
 var score = 0;
 var questions = [{
-        q: "Inside which HTML element do we put the JavaScript?",
-        answers: ["<script>", "<code>", "<javascript"],
-        correctIndex: 0
-    },
-    {
-        q: "How do you create a function in JavaScript",
-        answers: ["function:myFunction()", "function myFunction()", "function = myFunction()"],
-        correctIndex: 1
-    },
-    {
-        q: "How do you call a function named \"myFunction\"?",
-        answers: ["call myFunction()", "myFunction()", "function myFunction()"],
-        correctIndex: 1
-    },
-    {
-        q: "How can you add a comment in JavaScript",
-        answers: ["//", "<!>", "**"],
-        correctIndex: 0
-    },
-    {
-        q: "How would you generate a random integer between 0 and 9",
-        answers: ["Math.random(9)", "Math random * 9", "Math.random()*9"],
-        correctIndex: 2
-    },
-]
+            q: "Inside which HTML element do we put the JavaScript?",
+            answers: ["<script>", "<code>", "<javascript>"],
+            correctIndex: 0
+        },
+        {
+            q: "How do you create a function in JavaScript",
+            answers: ["function:myFunction()", "function myFunction()", "function = myFunction()"],
+            correctIndex: 1
+        },
+        {
+            q: "How do you call a function named \"myFunction\"?",
+            answers: ["call myFunction()", "myFunction()", "function myFunction()"],
+            correctIndex: 1
+        },
+        {
+            q: "How can you add a comment in JavaScript",
+            answers: ["//", "<!>", "**"],
+            correctIndex: 0
+        },
+        {
+            q: "How would you generate a random integer between 0 and 9",
+            answers: ["Math.random(9)", "Math random * 9", "Math.random()*9"],
+            correctIndex: 2
+        },
+    ]
+    //console logs
 
 //render last round score and initials
 savedInitials.textContent = localStorage.getItem("initials")
@@ -48,7 +49,7 @@ startButton.addEventListener("click", function() {
         renderTime();
     }, 1000);
     startButton.remove();
-    renderQuiz();
+    runQuiz();
 })
 
 //formats remaining minutes
@@ -90,20 +91,59 @@ function renderTime() {
         endQuiz();
     }
 }
+i = 0
+    //runQuiz() asks the first question from the array questions. Answer choices are created as buttons
+function runQuiz() {
+    if (i >= questions.length) {
+        endQuiz()
+    } else {
+        questionDiv.innerText = questions[i].q
+        for (j = 0; j < questions[i].answers.length; j++) {
+            var ansButton = document.createElement("button")
+                //ansButton.className = "btn-primary btn-block text-left"
+            ansButton.innerText = questions[i].answers[j]
+            ansButton.className = "answer-button"
+            ansButton.setAttribute("index", j)
+                //on click, check answer and go to next question
+            ansButton.addEventListener("click", function() {
+                userAnswer = this.getAttribute("index");
+                console.log(userAnswer)
+                console.log(questions[i].correctIndex)
 
-function renderQuiz() {};
+                if (questions[i].correctIndex == userAnswer) { score = score + 1 } else {}
+
+                numCorrect.textContent = "Score: " + score;
+                i++;
+                runQuiz();
+            })
+            ansButton.style.alignContent = "space-between";
+            ansButton.style.margin = "10px";
+            questionDiv.appendChild(ansButton)
+        }
+    }
+}
+
+//write questions[i].q
+
+//make buttons for questions[i].answers[all]
+//compare value of button pressed to questions[i].correctIndex
+//if wrong, subtract 10 seconds
+//if right, add 1 to score
+//go to next question
+//}
+
 //ends timer, saves initials and score, creates button to restart quiz
 function endQuiz() {
+    //display correct information, stop timer, save scores and initials
     clearInterval(interval);
     numCorrect.textContent = "Final Score: " + score;
-    questiondiv.remove();
+    questionDiv.remove();
     var initials = prompt("Nice score! Enter your intials?")
     localStorage.setItem("initials", initials)
     localStorage.setItem("score", score)
     savedInitials.textContent = localStorage.getItem("initials")
     savedScore.textContent = localStorage.getItem("score")
-
-
+        //create restart button that reloads page if clicked
     var restartBtn = document.createElement("button");
     restartBtn.innerHTML = "Try again?";
     quizdiv.appendChild(restartBtn);
